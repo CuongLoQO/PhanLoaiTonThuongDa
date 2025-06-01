@@ -1,0 +1,263 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Skin Lesion Classifier</title>
+  <style>
+    body { font-family: Arial; text-align: center; margin-top: 50px; }
+    .preview { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Phân loại tổn thương da</h1>
+  <form method="POST" enctype="multipart/form-data">
+    <input type="file" name="image" accept="image/*" required>
+    <button type="submit">Dự đoán</button>
+  </form>
+
+  {% if image %}
+    <div class="preview">
+      <h3>Ảnh bạn đã tải lên:</h3>
+      <img src="{{ url_for('static', filename='uploads/' ~ image) }}" width="300"><br>
+      <h3>Kết quả dự đoán:</h3>
+      <p><strong>{{ prediction }}</strong> (độ tin cậy: {{ '%.2f'|format(confidence * 100) }}%)</p>
+    </div>
+  {% endif %}
+</body>
+</html> -->
+
+
+<!-- <!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Phân loại bệnh da liễu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f4f4f4;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #006699;
+        }
+        .upload-form {
+            margin-bottom: 30px;
+        }
+        .upload-form input[type="file"] {
+            padding: 8px;
+        }
+        .upload-form input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #006699;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .result, .suggestion, .history {
+            background: white;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ccc;
+        }
+        .result img {
+            max-width: 300px;
+            display: block;
+            margin-top: 10px;
+        }
+        .history img {
+            max-width: 100px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+        }
+        .history-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        a {
+            color: #006699;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Phân loại bệnh da liễu bằng hình ảnh</h1>
+
+    <div class="upload-form">
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="image" required>
+            <input type="submit" value="Tải ảnh và dự đoán">
+        </form>
+    </div>
+
+    {% if image %}
+    <div class="result">
+        <h2>Kết quả dự đoán</h2>
+        <p><strong>Bệnh:</strong> {{ prediction }}</p>
+        <p><strong>Độ tin cậy:</strong> {{ '%.2f'|format(confidence * 100) }}%</p>
+        <img src="{{ url_for('static', filename='uploads/' + image) }}" alt="Ảnh đã tải lên">
+    </div>
+    {% endif %}
+
+    {% if suggestion %}
+    <div class="suggestion">
+        <h2>{{suggestion.name}}</h2>
+        <p><strong>Mô tả:</strong> {{ suggestion.description }}</p>
+        <p><a href="{{ suggestion.article }}" target="_blank">🔗 Bài viết liên quan</a></p>
+        <p><a href="{{ suggestion.advice }}" target="_blank">💡 Tư vấn điều trị</a></p>
+        <img src="{{ url_for('static', filename='suggestions/' + suggestion.image) }}" alt="Ảnh bệnh" width="300">
+    </div>
+    {% endif %}
+
+    {% if history %}
+    <div class="history">
+        <h2>Lịch sử dự đoán gần đây</h2>
+        {% for item in history %}
+        <div class="history-item">
+            <img src="{{ url_for('static', filename='uploads/' + item.image) }}" alt="Lịch sử">
+            <div>
+                <p><strong>{{ item.prediction }}</strong> ({{ '%.2f'|format(item.confidence * 100) }}%)</p>
+            </div>
+        </div>
+        {% endfor %}
+        <p><a href="{{ url_for('clear_history') }}">🗑️ Xoá lịch sử</a></p>
+    </div>
+    {% endif %}
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Phân loại bệnh da liễu</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <h1>Phân loại tổn thương da thông qua hình ảnh</h1>
+
+    <div class="horizontal-row">
+        <!-- Form Upload và nút lịch sử -->
+        <div class="container upload-form">
+            <form method="POST" enctype="multipart/form-data">
+                <input type="file" name="image" required><br>
+                <input type="submit" value="Tải ảnh và dự đoán">
+            </form>
+            <button class="btn-history" onclick="window.location.href='/history'">📜 Xem lịch sử dự đoán</button>
+        </div>
+
+        <!-- Phần kết quả dự đoán -->
+        {% if image %}
+        <div class="container result">
+            <h2>Kết quả dự đoán</h2>
+            <p><strong>Bệnh:</strong> {{ prediction }}</p>
+            <p><strong>Độ tin cậy:</strong> {{ '%.2f'|format(confidence * 100) }}%</p>
+            <img src="{{ url_for('static', filename='uploads/' + image) }}" alt="Ảnh đã tải lên" />
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Phần mô tả riêng hàng dưới -->
+    {% if suggestion %}
+    <div class="container suggestion">
+        <h2>{{suggestion.name}}</h2>
+        <iframe src="https://www.vinmec.com/vie/benh/ung-thu-hac-to-da-4723" width="30%" height="300"
+            style="border:1px solid #ccc;"></iframe>
+
+        <p><strong>Mô tả:</strong> {{ suggestion.description }}</p>
+        <p><a href="{{ suggestion.article }}" target="_blank">🔗 Bài viết liên quan</a></p>
+        <p><a href="{{ suggestion.advice }}" target="_blank">💡 Tư vấn điều trị</a></p>
+        <img src="{{ url_for('static', filename='suggestions/' + suggestion.image) }}" alt="Ảnh bệnh" />
+    </div>
+    {% endif %}
+
+    <!-- Nút bật/tắt chat box -->
+    <button id="toggle-chat-btn">💬</button>
+
+    <!-- Chat box container -->
+    <div id="chatbot-container">
+        <h2>Chatbot tư vấn bệnh da liễu</h2>
+        <div id="chat-box"></div>
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Nhập câu hỏi về bệnh da liễu..." />
+            <button id="send-btn">Gửi</button>
+        </div>
+    </div>
+    <script>
+        // Chức năng chuyển hướng đến trang lịch sử
+        document.querySelector('.btn-history').addEventListener('click', function () {
+            window.location.href = '/history';
+        });
+
+        const chatBox = document.getElementById('chat-box');
+        const chatInput = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        sendBtn.addEventListener('click', async () => {
+            const question = chatInput.value.trim();
+            if (!question) return;
+
+            appendMessage('Bạn', question);
+            chatInput.value = '';
+            appendMessage('Chatbot', 'Đang trả lời...');
+
+            try {
+                const response = await fetch('/chatbot', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question })
+                });
+                const data = await response.json();
+
+                removeLastMessage('Chatbot');
+
+                if (data.answer) {
+                    appendMessage('Chatbot', data.answer);
+                } else {
+                    appendMessage('Chatbot', 'Xin lỗi, tôi chưa có câu trả lời cho câu hỏi này.');
+                }
+            } catch (error) {
+                removeLastMessage('Chatbot');
+                appendMessage('Chatbot', 'Có lỗi xảy ra, vui lòng thử lại.');
+                console.error(error);
+            }
+        });
+
+        function appendMessage(sender, text) {
+            const msg = document.createElement('div');
+            msg.style.marginBottom = '10px';
+            msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
+            chatBox.appendChild(msg);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function removeLastMessage(sender) {
+            const messages = chatBox.querySelectorAll('div');
+            for (let i = messages.length - 1; i >= 0; i--) {
+                if (messages[i].innerHTML.startsWith(`<strong>${sender}:</strong>`)) {
+                    chatBox.removeChild(messages[i]);
+                    break;
+                }
+            }
+        }
+        const toggleBtn = document.getElementById('toggle-chat-btn');
+        const chatbotContainer = document.getElementById('chatbot-container');
+
+        toggleBtn.addEventListener('click', () => {
+            if (chatbotContainer.style.display === 'none' || chatbotContainer.style.display === '') {
+                chatbotContainer.style.display = 'flex';
+                toggleBtn.textContent = '✖';  // đổi biểu tượng thành dấu x khi mở
+            } else {
+                chatbotContainer.style.display = 'none';
+                toggleBtn.textContent = '💬';  // đổi lại biểu tượng chat khi ẩn
+            }
+        });
+    </script>
+</body>
+
+</html>

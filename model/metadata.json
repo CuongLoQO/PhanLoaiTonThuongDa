@@ -1,0 +1,15 @@
+{
+    "label_map": {
+        "0": "basal cell carcinoma",
+        "1": "vascular lesion",
+        "2": "actinic keratosis",
+        "3": "seborrheic keratosis",
+        "4": "pigmented benign keratosis",
+        "5": "squamous cell carcinoma",
+        "6": "nevus",
+        "7": "melanoma",
+        "8": "dermatofibroma"
+    },
+    "mean": 163.03431300787278,
+    "std": 42.0520915232458
+}
