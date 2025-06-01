@@ -606,8 +606,8 @@ disease_info = {
 }
 
 # OpenAI client
-client = OpenAI(api_key="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")
-
+# client = OpenAI(api_key="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")
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 def preprocess_image(image_path, target_size=(128, 128)):
     img = Image.open(image_path).convert('RGB').resize(target_size)
     img_array = np.array(img).astype(np.float32)

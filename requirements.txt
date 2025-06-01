@@ -2,4 +2,5 @@ Flask
 tensorflow
 numpy
 pillow
+openai
 gunicorn
