@@ -1,7 +1,7 @@
 from openai import OpenAI
 
 client = OpenAI(
-    api_key="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"
+    api_key="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"
 )
 
 def ask_chatgpt():
